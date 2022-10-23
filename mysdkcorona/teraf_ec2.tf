@@ -95,38 +95,18 @@ resource "aws_security_group" "SSh_HTTP_security" {
   }
 }
 
-resource "aws_s3_bucket" "corona-api" {
-  bucket = "covid-data-s3bucket"
-  tags = {
-    Description = "Bucket for corona api"
-  }
-}
-resource "aws_s3_bucket_object" "corona-api-script" {
-  content = "sdk_friday_21-10/mysdkcorona/covid_test_apply.py"
-  key = "covid_test_apply.py"
-  bucket = aws_s3_bucket.corona-api.id
-}
-resource "aws_s3_bucket" "acl" {
-  bucket = "ovid-data-s3bucket"
-  acl    = "public-read"
-
-  tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
-  }
-}
-
 resource "aws_instance" "my_sdktfec2" {
 
-  ami           = "ami-0d593311db5abb72b"
-  instance_type = "t2.micro"
+  ami                         = "ami-0d593311db5abb72b"
+  instance_type               = "t2.micro"
   associate_public_ip_address = true
-  subnet_id = aws_subnet.public_subnet_1.id
-  vpc_security_group_ids = [aws_security_group.SSh_HTTP_security.id]
-   key_name      = "vockey"
-  user_data = file("userdata.sh")
+  subnet_id                  = aws_subnet.public_subnet_1.id
+  iam_instance_profile       = "LabInstanceProfile"
+  vpc_security_group_ids     = [aws_security_group.SSh_HTTP_security.id]
+  key_name                   = "vockey"
+  user_data                  = file("userdata.sh")
   tags = {
-    Name = "My sdkTFec2"
+    Name = "My sdkCovidTFec2"
   }
 }
 
